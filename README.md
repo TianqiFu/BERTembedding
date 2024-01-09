@@ -1,0 +1,2 @@
+将几种词嵌入方式进行对比
+由于git限制文件大小，bert需要从hugggingface下载。
