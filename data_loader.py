@@ -1,8 +1,11 @@
 # coding=utf-8
 import json
+
+import pandas as pd
 import torch
 import numpy as np
 from torch.utils.data import DataLoader, Dataset
+import csv
 
 
 class ListDataset(Dataset):
@@ -67,7 +70,22 @@ class AWAREDataset(ListDataset):
                 data.append((text, label))
         return data
 
+# custom dataset read csv
+class AWARESDataset(ListDataset):
+    @staticmethod
+    def load_data(filename):
+        data = []
+        with open(filename, 'r', encoding='utf-8') as csvfile:
+            reader = csv.reader(csvfile)
+            # 获取列名
+            headers = next(reader)
 
+            # 逐行读取数据，将每行的text和label存入元组中，然后添加到data列表中
+            for row in reader:
+                text = row[0]
+                label = row[1]
+                data.append((text, label))
+        return data
 
 
 class Collate:
@@ -116,11 +134,12 @@ if __name__ == "__main__":
     max_len = 512
     tokenizer = BertTokenizer.from_pretrained('../model_hub/')
     # train_dataset = CNEWSDataset(file_path='data/cnews/cnews.train.txt')
-    train_dataset = AWAREDataset(file_path='data/AWARE/AWARE.train.txt')
+    # train_dataset = AWAREDataset(file_path='data/AWARE/AWARE.train.txt')
+    train_dataset = AWARESDataset(file_path='data/AWARE_S/AWARE2.train.csv')
     print(train_dataset[0])
 
     # with open('data/cnews/labels.txt', 'r', encoding="utf-8") as fp:
-    with open('data/AWARE/labels.txt', 'r', encoding="utf-8") as fp:
+    with open('data/AWARE_S/labels.txt', 'r', encoding="utf-8") as fp:
         labels = fp.read().strip().split("\n")
     id2tag = {}
     tag2id = {}
