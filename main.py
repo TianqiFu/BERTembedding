@@ -22,7 +22,7 @@ from transformers import BertTokenizer
 import bert_config
 import models
 from utils import utils
-from data_loader import CNEWSDataset, Collate, CPWSDataset,AWAREDataset
+from data_loader import CNEWSDataset, Collate, CPWSDataset, AWAREDataset, AWARESDataset
 
 logger = logging.getLogger(__name__)
 
@@ -186,18 +186,21 @@ datasets = {
     "cnews": CNEWSDataset,
     "cpws": CPWSDataset,
     "AWARE": AWAREDataset,
+    "AWARE_S": AWARESDataset
 }
 
 train_files = {
     "cnews": "cnews.train.txt",
     "cpws": "train_data.txt",
     "AWARE": "AWARE.train.txt",
+    "AWARE_S": "AWARE2.train.csv"
 }
 
 test_files = {
     "cnews": "cnews.test.txt",
     "cpws": "test_data.txt",
-    "AWARE": "AWARE.test.txt"
+    "AWARE": "AWARE.test.txt",
+    "AWARE_S": "AWARE2.test.csv"
 }
 
 
