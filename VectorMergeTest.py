@@ -2,6 +2,7 @@
 import torch
 from transformers import BertModel, BertTokenizer
 from tqdm import tqdm
+import numpy as np
 
 # 加载BERT模型
 model = BertModel.from_pretrained("bert-base-uncased")
@@ -16,10 +17,11 @@ average_distances_to_centroids = [8.352705708171774, 8.268810668393852,	8.185850
                                   8.293398840348594]
 process_list = [text, triple]
 
+embedding_list = []
 for t in tqdm(process_list):
     # 对文本进行向量化
     tokens = tokenizer.tokenize(t)
-    ids = tokenizer.convert_tokens_to_ids(t)
+    ids = tokenizer.convert_tokens_to_ids(tokens)
     input_ids = torch.tensor([ids])
 
     # 输出文本的向量
@@ -28,4 +30,7 @@ for t in tqdm(process_list):
 
     # 获取句向量
     sentence_embedding = token_embeddings.mean(dim=0)
-    print(sentence_embedding)
+    embedding_list.append(sentence_embedding)
+
+    # print(sentence_embedding)
+    print(embedding_list)
