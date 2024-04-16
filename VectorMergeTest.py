@@ -27,10 +27,26 @@ for t in tqdm(process_list):
     # 输出文本的向量
     outputs = model(input_ids)
     token_embeddings = outputs[0]
+    print(token_embeddings.shape)
 
     # 获取句向量
     sentence_embedding = token_embeddings.mean(dim=0)
     embedding_list.append(sentence_embedding)
 
     # print(sentence_embedding)
-    print(embedding_list)
+    # print(embedding_list)
+
+# 使用平均池化，将两个不同长度的文本向量拼接在一起
+mean_tensor1 = torch.mean(embedding_list[0], dim=0)  # 结果形状为[768]
+mean_tensor2 = torch.mean(embedding_list[1], dim=0)  # 结果形状为[768]
+
+# 拼接池化后的结果
+concatenated_vector = torch.cat((mean_tensor1, mean_tensor2), dim=0)  # 结果形状为[1536]
+print(concatenated_vector.shape, concatenated_vector.dtype)
+
+# 将两个向量拼接, 将平均中心距离由list转化为向量
+average_distances_to_centroids_tensor = torch.tensor(average_distances_to_centroids, dtype=torch.float32)
+extended_vector = torch.cat((concatenated_vector, average_distances_to_centroids_tensor), dim=0)  # 结果形状为[1546]
+print(extended_vector.shape)
+
+
